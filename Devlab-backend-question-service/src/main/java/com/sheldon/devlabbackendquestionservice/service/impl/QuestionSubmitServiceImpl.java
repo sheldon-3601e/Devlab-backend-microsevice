@@ -9,10 +9,11 @@ import com.sheldon.devlabbackendcommon.constant.CommonConstant;
 import com.sheldon.devlabbackendcommon.exception.BusinessException;
 import com.sheldon.devlabbackendcommon.utils.SqlUtils;
 import com.sheldon.devlabbackendquestionservice.mapper.QuestionSubmitMapper;
+import com.sheldon.devlabbackendquestionservice.message.MyMessageProducer;
 import com.sheldon.devlabbackendquestionservice.service.QuestionService;
 import com.sheldon.devlabbackendquestionservice.service.QuestionSubmitService;
-import com.sheldon.devlabbackendserviceclient.service.JudgeService;
-import com.sheldon.devlabbackendserviceclient.service.UserService;
+import com.sheldon.devlabbackendserviceclient.service.JudgeFeignClient;
+import com.sheldon.devlabbackendserviceclient.service.UserFeignClient;
 import devlabbackendmodel.dto.questionSubmit.QuestionSubmitAddRequest;
 import devlabbackendmodel.dto.questionSubmit.QuestionSubmitQueryRequest;
 import devlabbackendmodel.entity.Question;
@@ -45,11 +46,14 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     @Lazy
-    private JudgeService judgeService;
+    private JudgeFeignClient judgeFeignClient;
+
+    @Resource
+    private MyMessageProducer myMessageProducer;
 
     @Override
     public Long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, User loginUser) {
@@ -76,14 +80,15 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         questionSubmit.setQuestionId(questionId);
         questionSubmit.setUserId(loginUser.getId());
 
-        // TODO 限流，防止用户提交过快
+        // 限流，防止用户提交过快
         boolean save = this.save(questionSubmit);
         if (!save) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入失败");
         }
-        // TODO 调用代码沙箱
+        // 调用代码沙箱
         Long questionSubmitId = questionSubmit.getId();
-        CompletableFuture.runAsync(() -> judgeService.doJudge(questionSubmitId));
+        myMessageProducer.sendMessage("code_exchange", "my_routingKey", String.valueOf(questionSubmitId));
+//        CompletableFuture.runAsync(() -> judgeFeignClient.doJudge(questionSubmitId));
         return questionSubmitId;
     }
 
@@ -123,7 +128,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         // 脱敏：仅本人和管理员能看见自己（提交 userId 和登录用户 id 不同）提交的代码
         long userId = loginUser.getId();
         // 处理脱敏
-        if (userId != questionSubmit.getUserId() && !userService.isAdmin(loginUser)) {
+        if (userId != questionSubmit.getUserId() && !userFeignClient.isAdmin(loginUser)) {
             questionSubmitVO.setCode(null);
         }
         return questionSubmitVO;

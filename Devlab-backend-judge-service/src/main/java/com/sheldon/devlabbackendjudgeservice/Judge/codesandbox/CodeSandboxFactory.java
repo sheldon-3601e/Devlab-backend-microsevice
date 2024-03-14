@@ -1,8 +1,9 @@
 package com.sheldon.devlabbackendjudgeservice.Judge.codesandbox;
 
-import com.sheldon.devlab.Judge.codesandbox.impl.ExampleCodeSandbox;
-import com.sheldon.devlab.Judge.codesandbox.impl.RemoteCodeSandbox;
-import com.sheldon.devlab.Judge.codesandbox.impl.ThirdPartyCodeSandbox;
+
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.impl.ExampleCodeSandbox;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.impl.RemoteCodeSandbox;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.impl.ThirdPartyCodeSandbox;
 
 /**
  * 代码沙箱工厂（根据字符串参数创建指定的代码沙箱实例）

@@ -15,7 +15,7 @@ import java.util.List;
 public interface TagService extends IService<Tag> {
 
     /**
-     * 获取脱敏的用户信息
+     * 获取标签封装类
      *
      * @param tag
      * @return
@@ -23,7 +23,7 @@ public interface TagService extends IService<Tag> {
     TagVO getTagVO(Tag tag);
 
     /**
-     * 获取脱敏的用户信息
+     * 获取标签封装类列表
      *
      * @param tagList
      * @return

@@ -1,8 +1,9 @@
 package com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.impl;
 
-import com.sheldon.devlab.Judge.codesandbox.CodeSandbox;
-import com.sheldon.devlab.Judge.codesandbox.model.ExecuteCodeRequest;
-import com.sheldon.devlab.Judge.codesandbox.model.ExecuteCodeResponse;
+
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.CodeSandbox;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.ExecuteCodeRequest;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.ExecuteCodeResponse;
 
 /**
  * @ClassName ThirdPartyCodeSandbox

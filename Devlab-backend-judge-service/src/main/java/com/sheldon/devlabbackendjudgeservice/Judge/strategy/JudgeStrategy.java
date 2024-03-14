@@ -1,6 +1,7 @@
 package com.sheldon.devlabbackendjudgeservice.Judge.strategy;
 
-import com.sheldon.devlab.Judge.codesandbox.model.JudgeInfo;
+
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.JudgeInfo;
 
 /**
  * @ClassName JudgeStrategy

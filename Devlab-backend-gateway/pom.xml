@@ -13,21 +13,30 @@
 	<description>Devlab-backend-gateway</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<spring-cloud.version>2021.0.8</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway-mvc</artifactId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.github.xiaoymin</groupId>
+			<artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+			<version>4.3.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -40,6 +49,7 @@
 			<artifactId>Devlab-backend-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -52,6 +62,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 
 	<build>
 		<plugins>

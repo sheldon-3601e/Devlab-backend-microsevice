@@ -1,12 +1,13 @@
 package com.sheldon.devlabbackendjudgeservice.Judge;
 
-import com.sheldon.devlab.Judge.codesandbox.model.JudgeInfo;
-import com.sheldon.devlab.Judge.strategy.DefaultJudgeStrategy;
-import com.sheldon.devlab.Judge.strategy.JavaLangugeJudgeStrategy;
-import com.sheldon.devlab.Judge.strategy.JudgeContext;
-import com.sheldon.devlab.Judge.strategy.JudgeStrategy;
-import com.sheldon.devlab.model.entity.QuestionSubmit;
-import com.sheldon.devlab.model.enums.QuestionSubmitLanguageEnum;
+
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.JudgeInfo;
+import com.sheldon.devlabbackendjudgeservice.Judge.strategy.DefaultJudgeStrategy;
+import com.sheldon.devlabbackendjudgeservice.Judge.strategy.JavaLangugeJudgeStrategy;
+import com.sheldon.devlabbackendjudgeservice.Judge.strategy.JudgeContext;
+import com.sheldon.devlabbackendjudgeservice.Judge.strategy.JudgeStrategy;
+import devlabbackendmodel.entity.QuestionSubmit;
+import devlabbackendmodel.enums.QuestionSubmitLanguageEnum;
 import org.springframework.stereotype.Service;
 
 /**

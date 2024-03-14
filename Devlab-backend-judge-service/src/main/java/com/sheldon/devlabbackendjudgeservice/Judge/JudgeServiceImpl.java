@@ -1,22 +1,22 @@
 package com.sheldon.devlabbackendjudgeservice.Judge;
 
+
 import cn.hutool.json.JSONUtil;
-import com.sheldon.devlab.Judge.codesandbox.CodeSandbox;
-import com.sheldon.devlab.Judge.codesandbox.CodeSandboxFactory;
-import com.sheldon.devlab.Judge.codesandbox.CodeSandboxProxy;
-import com.sheldon.devlab.Judge.codesandbox.model.ExecuteCodeRequest;
-import com.sheldon.devlab.Judge.codesandbox.model.ExecuteCodeResponse;
-import com.sheldon.devlab.Judge.codesandbox.model.JudgeInfo;
-import com.sheldon.devlab.Judge.strategy.JudgeContext;
-import com.sheldon.devlab.common.ErrorCode;
-import com.sheldon.devlab.exception.BusinessException;
-import com.sheldon.devlab.model.dto.question.JudgeCase;
-import com.sheldon.devlab.model.dto.questionSubmit.JudgeConfig;
-import com.sheldon.devlab.model.entity.Question;
-import com.sheldon.devlab.model.entity.QuestionSubmit;
-import com.sheldon.devlab.model.enums.QuestionSubmitStatusEnum;
-import com.sheldon.devlab.service.QuestionService;
-import com.sheldon.devlab.service.QuestionSubmitService;
+import com.sheldon.devlabbackendcommon.common.ErrorCode;
+import com.sheldon.devlabbackendcommon.exception.BusinessException;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.CodeSandbox;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.CodeSandboxFactory;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.CodeSandboxProxy;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.ExecuteCodeRequest;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.ExecuteCodeResponse;
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.JudgeInfo;
+import com.sheldon.devlabbackendjudgeservice.Judge.strategy.JudgeContext;
+import com.sheldon.devlabbackendserviceclient.service.QuestionFeignClient;
+import devlabbackendmodel.dto.question.JudgeCase;
+import devlabbackendmodel.dto.questionSubmit.JudgeConfig;
+import devlabbackendmodel.entity.Question;
+import devlabbackendmodel.entity.QuestionSubmit;
+import devlabbackendmodel.enums.QuestionSubmitStatusEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +35,7 @@ import java.util.stream.Collectors;
 public class JudgeServiceImpl implements JudgeService {
 
     @Resource
-    private QuestionSubmitService questionSubmitService;
-
-    @Resource
-    private QuestionService questionService;
+    private QuestionFeignClient questionFeignClient;
 
     @Resource
     private JudgeManager judgeManager;
@@ -51,7 +48,7 @@ public class JudgeServiceImpl implements JudgeService {
     public QuestionSubmit doJudge(Long questionSubmitId) {
 
         // 1）传入题目的提交 id，获取到对应的题目、提交信息（包含代码、编程语言等）
-        QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
+        QuestionSubmit questionSubmit = questionFeignClient.getQuestionSubmitById(questionSubmitId);
         if (questionSubmit == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目提交记录不存在");
         }
@@ -61,7 +58,7 @@ public class JudgeServiceImpl implements JudgeService {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "题目正在判题中");
         }
         Long questionId = questionSubmit.getQuestionId();
-        Question question = questionService.getById(questionId);
+        Question question = questionFeignClient.getQuestionById(questionId);
         if (question == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目信息不存在");
         }
@@ -69,7 +66,7 @@ public class JudgeServiceImpl implements JudgeService {
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.WORKING.getValue());
-        boolean update = questionSubmitService.updateById(questionSubmitUpdate);
+        boolean update = questionFeignClient.updateQuestionSubmitById(questionSubmitUpdate);
         if (!update) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "判题状态更改失败");
         }
@@ -111,11 +108,11 @@ public class JudgeServiceImpl implements JudgeService {
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoResponse));
-        update = questionSubmitService.updateById(questionSubmitUpdate);
+        update = questionFeignClient.updateQuestionSubmitById(questionSubmitUpdate);
         if (!update) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "题目状态更新错误");
         }
-        QuestionSubmit questionSubmitResult = questionSubmitService.getById(questionId);
+        QuestionSubmit questionSubmitResult = questionFeignClient.getQuestionSubmitById(questionId);
         return questionSubmitResult;
 
     }

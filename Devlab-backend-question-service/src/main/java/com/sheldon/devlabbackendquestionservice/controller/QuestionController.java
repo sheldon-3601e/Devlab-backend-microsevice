@@ -13,8 +13,8 @@ import com.sheldon.devlabbackendcommon.exception.BusinessException;
 import com.sheldon.devlabbackendcommon.exception.ThrowUtils;
 import com.sheldon.devlabbackendquestionservice.service.QuestionService;
 import com.sheldon.devlabbackendquestionservice.service.QuestionSubmitService;
-import com.sheldon.devlabbackendserviceclient.service.QuestionTagsService;
-import com.sheldon.devlabbackendserviceclient.service.UserService;
+import com.sheldon.devlabbackendquestionservice.service.QuestionTagsService;
+import com.sheldon.devlabbackendserviceclient.service.UserFeignClient;
 import devlabbackendmodel.dto.question.*;
 import devlabbackendmodel.dto.questionSubmit.JudgeConfig;
 import devlabbackendmodel.dto.questionSubmit.QuestionSubmitAddRequest;
@@ -40,7 +40,7 @@ import java.util.List;
  * @author <a href="https://github.com/sheldon-3601e">sheldon</a>
  */
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/")
 @Slf4j
 public class QuestionController {
 
@@ -48,7 +48,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userService;
 
     @Resource
     private QuestionTagsService questionTagsService;
@@ -113,7 +113,7 @@ public class QuestionController {
         Question oldQuestion = questionService.getById(id);
         ThrowUtils.throwIf(oldQuestion == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestion.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldQuestion.getUserId().equals(user.getId()) && !userService.isAdmin(user)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         boolean b = questionService.removeById(id);
@@ -297,13 +297,18 @@ public class QuestionController {
         return ResultUtils.success(questionTags);
     }
 
+    /**
+     * 提交题目
+     * @param questionSubmitAddRequest
+     * @param request
+     * @return
+     */
     @PostMapping("/submit")
     public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
                                                HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 登录才能点赞
         final User loginUser = userService.getLoginUser(request);
         Long result = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(result);

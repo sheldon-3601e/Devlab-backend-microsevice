@@ -1,6 +1,7 @@
 package com.sheldon.devlabbackendjudgeservice.Judge;
 
-import com.sheldon.devlab.model.entity.QuestionSubmit;
+
+import devlabbackendmodel.entity.QuestionSubmit;
 
 /**
  * @ClassName JudgeService

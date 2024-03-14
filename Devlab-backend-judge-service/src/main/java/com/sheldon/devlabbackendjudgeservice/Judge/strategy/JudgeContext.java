@@ -1,8 +1,9 @@
 package com.sheldon.devlabbackendjudgeservice.Judge.strategy;
 
-import com.sheldon.devlab.Judge.codesandbox.model.JudgeInfo;
-import com.sheldon.devlab.model.dto.questionSubmit.JudgeConfig;
-import com.sheldon.devlab.model.entity.QuestionSubmit;
+
+import com.sheldon.devlabbackendjudgeservice.Judge.codesandbox.model.JudgeInfo;
+import devlabbackendmodel.dto.questionSubmit.JudgeConfig;
+import devlabbackendmodel.entity.QuestionSubmit;
 import lombok.Data;
 
 import java.util.List;

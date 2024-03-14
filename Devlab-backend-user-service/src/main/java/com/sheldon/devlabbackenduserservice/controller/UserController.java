@@ -36,7 +36,7 @@ import java.util.List;
  * @from <a href="https://github.com/sheldon-3601e">sheldon</a>
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/")
 @Slf4j
 public class UserController {
 

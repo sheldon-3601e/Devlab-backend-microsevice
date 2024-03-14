@@ -26,14 +26,10 @@
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.5.2</version>
 		</dependency>
-		<!-- redis -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
+			<groupId>com.github.xiaoymin</groupId>
+			<artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
+			<version>4.3.0</version>
 		</dependency>
 		<!--https://github.com/redisson/redisson?tab=readme-ov-file#quick-start-->
 		<dependency>
@@ -62,7 +58,13 @@
 			<artifactId>Devlab-backend-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.sheldon</groupId>
+            <artifactId>Devlab-backend-service-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
